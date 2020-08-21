@@ -1,0 +1,32 @@
+// Test file for Census input information
+#print "Hello World"
+clock {
+    timezone PST +8PDT;
+    starttime '2016-7-05 00:00:00 PST';
+    stoptime '2016-7-06 00:00:00 PST';
+};
+#set relax_naming_rules=1;
+#set randomseed=10;
+module residential {
+    implicit_enduses DRYER|LIGHTS|MICROWAVE|WATERHEATER|DISHWASHER|REFRIGERATOR|FREEZER;
+};
+module tape;
+module powerflow;
+module climate;
+class climate {
+	double elevation[m];
+	double tzoffset[h];
+
+}
+object triplex_meter {
+    name house_meter;
+    nominal_voltage 120V;
+    phases AS;
+}
+object recorder {
+    parent house_meter;
+    property measured_real_power[kW];
+    interval 60;
+    file house_output.csv;
+}
+#include "house.glm";
